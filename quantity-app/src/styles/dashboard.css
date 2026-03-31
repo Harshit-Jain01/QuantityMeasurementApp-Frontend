@@ -1,0 +1,141 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* =========================
+   BACKGROUND
+========================= */
+body {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  min-height: 100vh;
+}
+
+/* =========================
+   CONTAINER
+========================= */
+.dashboard-container {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* =========================
+   CARD
+========================= */
+.card {
+  background: white;
+  padding: 25px;
+  border-radius: 15px;
+  width: 420px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+/* =========================
+   TITLE
+========================= */
+.card h2 {
+  margin-bottom: 15px;
+}
+
+/* =========================
+   ROW (BUTTON GROUP)
+========================= */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+button {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  background: #eee;
+  transition: 0.3s;
+}
+
+/* ACTIVE BUTTON */
+button.active {
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  transform: scale(1.05);
+}
+
+/* HOVER */
+button:hover {
+  background: #ddd;
+}
+
+/* =========================
+   INPUTS
+========================= */
+.inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.inputs input,
+.inputs select {
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+/* =========================
+   CALCULATE BUTTON
+========================= */
+.main-btn {
+  margin-top: 10px;
+  padding: 10px;
+  width: 100%;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  color: white;
+  border-radius: 10px;
+}
+
+/* =========================
+   RESULT
+========================= */
+.card h3 {
+  margin-top: 15px;
+  color: #333;
+}
+
+/* =========================
+   LOGOUT BUTTON
+========================= */
+.logout {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-weight: bold;
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+@media (max-width: 500px) {
+  .card {
+    width: 90%;
+  }
+}
