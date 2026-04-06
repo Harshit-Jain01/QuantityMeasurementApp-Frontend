@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import "../styles/dashboard.css";
 
+const BASE_URL = "http://localhost:8081";
+
 const Dashboard = () => {
 
   const [selectedType, setSelectedType] = useState("LengthUnit");
@@ -29,7 +31,13 @@ const Dashboard = () => {
 
   // Update units
   useEffect(() => {
-    const list = unitMap[selectedType];
+    const list = unitMap[selectedType] ?? [];
+    if (list.length < 2) {
+      setUnits([]);
+      setUnit1("");
+      setUnit2("");
+      return;
+    }
     setUnits(list);
     setUnit1(list[0]);
     setUnit2(list[1]);
@@ -38,6 +46,13 @@ const Dashboard = () => {
   //  Calculate
   const calculate = async () => {
     const token = localStorage.getItem("token");
+    setResult("");
+
+    if (!token) {
+      alert("Session expired. Please login again.");
+      window.location.href = "/";
+      return;
+    }
 
     let endpoint = "";
 
@@ -49,8 +64,13 @@ const Dashboard = () => {
       if (operator === "divide") endpoint = "/divide";
     }
 
+    if (selectedAction === "arithmetic" && selectedType === "TemperatureUnit") {
+      alert("Arithmetic operations are not supported for temperature units.");
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost:8081/api/v1/quantities" + endpoint, {
+      const res = await fetch(`${BASE_URL}/qma/api/v1/quantities${endpoint}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,17 +90,41 @@ const Dashboard = () => {
         })
       });
 
+      if (!res.ok) {
+        const errorText = await res.text();
+        let message = `Request failed with status ${res.status}`;
+
+        if (errorText) {
+          try {
+            const errorData = JSON.parse(errorText);
+            message =
+              errorData.message ||
+              errorData.error ||
+              message;
+          } catch {
+            message = errorText;
+          }
+        }
+
+        throw new Error(message);
+      }
+
       const data = await res.json();
 
       if (selectedAction === "compare") {
         setResult(data.resultString === "true" ? "Equal" : "Not Equal");
       } else {
-        setResult(`${data.resultValue} ${data.resultUnit}`);
+        const formattedResult =
+          data.resultUnit && data.resultUnit !== "null"
+            ? `${data.resultValue} ${data.resultUnit}`
+            : `${data.resultValue}`;
+
+        setResult(formattedResult);
       }
 
     } catch (err) {
-      console.error(err);
-      alert("Error while calculating");
+      console.error("Calculation failed:", err);
+      alert(err.message || "Error while calculating");
     }
   };
 
